@@ -1,0 +1,13 @@
+# Python Virtual Environments
+venv/
+__pycache__/
+
+# Node/React
+node_modules/
+dist/
+
+# Security Keys and Certificates
+*.pem
+*.crt
+*.key
+AWS_KEYS/

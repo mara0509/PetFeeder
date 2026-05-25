@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Pet Feeder</title>
+    <meta http-equiv="refresh" content="5">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px; margin: 20px auto; }
+        .alert { color: red; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>🐾 Smart Pet Feeder Dashboard</h1>
+
+    <div class="card">
+        <h2>Live Status</h2>
+	<div class="card" style="background-color: #fff3e0;">
+    <h2>Manual Control</h2>
+    <form action="/dispense" method="POST">
+        <button type="submit" style="background-color: #ff9800; color: white; padding: 15px 30px; font-size: 20px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            🦴 Dispense Food Now!
+        </button>
+    </form>
+
+    <p style="font-size: 12px; color: gray;">Sends a signal to the Pi -> ESP32 -> Servo</p>
+
+
+<div class="card" style="background-color: #e3f2fd;">
+        <h2>⏰ Scheduled Feedings</h2>
+        
+        <form action="/set_schedule" method="POST" style="margin-bottom: 15px;">
+            <input type="time" name="feed_time" required style="padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+            <button type="submit" style="background-color: #2196f3; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">
+                Add Time
+            </button>
+        </form>
+
+        <div style="text-align: left; display: inline-block;">
+            <ul style="font-size: 18px; list-style-type: '🕒 ';">
+                {% for t in schedule %}
+                    <li><strong>{{ t }}</strong></li>
+                {% else %}
+                    <li style="color: gray;">No schedules set yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+        {% if live %}
+            <h2>Food Level: <strong>{{ live.food_percentage }}%</strong></h2>
+            <p>
+                Pet Detected: 
+                {% if live.pet_detected %}
+                    <span class="alert">YES! 🐈</span>
+                {% else %}
+                    <span style="color: gray;">No</span>
+                {% endif %}
+            </p>
+        {% else %}
+            <p>Waiting for sensor data...</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Recent Activity (History)</h2>
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>Food %</th>
+                <th>Pet?</th>
+            </tr>
+            {% for item in history %}
+            <tr>
+                <td>{{ item.timestamp[:19] }}</td>
+                <td>{{ item.food_percentage }}%</td>
+                <td>{{ 'Yes' if item.pet_detected else 'No' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>
