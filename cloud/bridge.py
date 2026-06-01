@@ -6,9 +6,8 @@ import pytz
 from awscrt import mqtt5
 from awsiot import mqtt5_client_builder
 
-# ==========================================
-# 1. FIREBASE CONFIGURATION
-# ==========================================
+
+#firebase communication
 firebaseConfig = {
   "apiKey": "AIzaSyDMLnwwDZdFTaD-9KsOnZtUQaQjA9EWziI",
   "authDomain": "petfeeder-d4b6d.firebaseapp.com",
@@ -22,22 +21,18 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 
-# ==========================================
-# 2. AWS IOT CONFIGURATION
-# ==========================================
+#awsiot configuration
 ENDPOINT = "a1aywhd9abztbv-ats.iot.us-east-1.amazonaws.com"
 CERT = "AWS_KEYS/certificate.pem.crt"
 KEY = "AWS_KEYS/private.pem.key"
 TOPIC = "Test1"
-COMMAND_TOPIC = "feeder/commands" # New topic for sending commands down
+COMMAND_TOPIC = "feeder/commands" #topic for sending down commands from the web to the hardware
 CLIENT_ID = "EC2_Backend_Server"
 
 last_saved_food = None
 DROP_THRESHOLD = 2.0 
 
-# ==========================================
-# 3. MESSAGE HANDLERS
-# ==========================================
+#handler of messaged
 def on_publish_received(publish_packet_data):
     """Handles incoming sensor data from AWS and pushes to Firebase"""
     global last_saved_food
