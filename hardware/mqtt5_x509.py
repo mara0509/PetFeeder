@@ -205,10 +205,10 @@ if __name__ == '__main__':
         topic_filters=[message_topic, "feeder/commands"]))
     unsuback = unsubscribe_future.result(TIMEOUT)
 
-    print("==== Stopping Client ====")
+    print("Stopping Client")
     client.stop()
 
     if not stopped_event.wait(TIMEOUT):
         raise TimeoutError("Stop timeout")
 
-    print("==== Client Stopped! ====")
+    print(" Client Stopped!")
