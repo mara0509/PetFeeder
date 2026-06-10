@@ -1,3 +1,4 @@
+  GNU nano 8.7.1                                  bridge.py
 import time
 import json
 import pyrebase
@@ -6,38 +7,30 @@ import pytz
 from awscrt import mqtt5
 from awsiot import mqtt5_client_builder
 
-# ==========================================
 # 1. FIREBASE CONFIGURATION
-# ==========================================
+
 firebaseConfig = {
-  "apiKey": "AIzaSyDMLnwwDZdFTaD-9KsOnZtUQaQjA9EWziI",
-  "authDomain": "petfeeder-d4b6d.firebaseapp.com",
-  "databaseURL": "https://petfeeder-d4b6d-default-rtdb.europe-west1.firebasedatabase.app",
-  "projectId": "petfeeder-d4b6d",
-  "storageBucket": "petfeeder-d4b6d.firebasestorage.app",
-  "messagingSenderId": "995365531427",
-  "appId": "1:995365531427:web:e12c8cc17c1f013a81a696"
+ //
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 
-# ==========================================
+
 # 2. AWS IOT CONFIGURATION
-# ==========================================
-ENDPOINT = "a1aywhd9abztbv-ats.iot.us-east-1.amazonaws.com"
-CERT = "AWS_KEYS/certificate.pem.crt"
-KEY = "AWS_KEYS/private.pem.key"
+
+ENDPOINT = //
+CERT = /
+KEY = //
 TOPIC = "Test1"
-COMMAND_TOPIC = "feeder/commands" # New topic for sending commands down
-CLIENT_ID = "EC2_Backend_Server"
+COMMAND_TOPIC =//
+CLIENT_ID = //
 
 last_saved_food = None
-DROP_THRESHOLD = 2.0 
+DROP_THRESHOLD = 2.0
 
-# ==========================================
 # 3. MESSAGE HANDLERS
-# ==========================================
+
 def on_publish_received(publish_packet_data):
     """Handles incoming sensor data from AWS and pushes to Firebase"""
     global last_saved_food
@@ -69,6 +62,7 @@ def on_publish_received(publish_packet_data):
     except Exception as e:
         print(f"Error processing AWS message: {e}")
 
+
 def command_handler(message):
     """Listens to Firebase and pushes commands down to AWS"""
     try:
@@ -78,7 +72,7 @@ def command_handler(message):
             # If the user pressed the button, trigger is True
             if data.get("action") == "dispense" and data.get("trigger") == True:
                 print("\n[WEB APP] Dispense button pressed! Forwarding to AWS...")
-                
+
                 # Send the command to AWS IoT
                 payload = json.dumps({"feed_command": True})
                 client.publish(mqtt5.PublishPacket(
@@ -86,15 +80,13 @@ def command_handler(message):
                     payload=payload,
                     qos=mqtt5.QoS.AT_LEAST_ONCE
                 ))
-                
+
                 # Reset the trigger in Firebase so it doesn't fire twice
                 db.child("commands").update({"trigger": False})
     except Exception as e:
         print(f"Error handling Firebase command: {e}")
-
-# ==========================================
 # 4. MAIN LOOP
-# ==========================================
+
 if __name__ == '__main__':
     print("Starting 2-Way Cloud Bridge...")
 
@@ -119,46 +111,49 @@ if __name__ == '__main__':
 
     print("Listening for Raspberry Pi... Press Ctrl+C to stop.")
     print("Listening for Web App commands and checking schedule... Press Ctrl+C to stop.")
-    
+
     # Define your local timezone (Romania)
     local_tz = pytz.timezone('Europe/Bucharest')
     last_fed_time = ""
-
-    try:
+try:
         while True:
             # 1. Get the current time in Romania (Format: "HH:MM")
             now = datetime.datetime.now(local_tz)
             current_time_str = now.strftime("%H:%M")
-            
+
             # 2. We only need to check the schedule once per minute
             if current_time_str != last_fed_time:
-                
-                # Fetch the latest schedule from Firebase
-                schedule_node = db.child("feeder_status").child("schedule").get().val()
-                
-                if schedule_node:
-                    # Convert the Firebase dictionary into a simple list of times
-                    schedule_list = [v for k, v in schedule_node.items()]
-                    
-                    # 3. If the current time matches a scheduled time!
-                    if current_time_str in schedule_list:
-                        print(f"\n[ALARM] It is {current_time_str}! Executing scheduled feeding...")
-                        
-                        # Send the command to AWS IoT
-                        payload = json.dumps({"feed_command": True})
-                        client.publish(mqtt5.PublishPacket(
-                            topic=COMMAND_TOPIC,
-                            payload=payload,
-                            qos=mqtt5.QoS.AT_LEAST_ONCE
-                        ))
-                        
-                        # Mark this minute as "fed" so it doesn't dispense 60 times in one minute!
-                        last_fed_time = current_time_str
-            
+
+                try:
+                    # Fetch the latest schedule from Firebase
+                    schedule_node = db.child("feeder_status").child("schedule").get().val()
+
+                    if schedule_node:
+                        # Convert the Firebase dictionary into a simple list of times
+                        schedule_list = [v for k, v in schedule_node.items()]
+
+                        # 3. If the current time matches a scheduled time!
+                        if current_time_str in schedule_list:
+                            print(f"\n[ALARM] It is {current_time_str}! Executing scheduled feeding...>
+
+                            # Send the command to AWS IoT
+                            payload = json.dumps({"feed_command": True})
+                            client.publish(mqtt5.PublishPacket(
+                                topic=COMMAND_TOPIC,
+                                payload=payload,
+                                qos=mqtt5.QoS.AT_LEAST_ONCE
+                            ))
+
+                            # Mark this minute as "fed" so it doesn't dispense 60 times in one minute!
+                            last_fed_time = current_time_str
+
+                except Exception as e:
+                    print(f"Brief network timeout ignored: {e}")
             # Sleep for 5 seconds before checking the clock again
             time.sleep(5)
-            
+
     except KeyboardInterrupt:
         print("\nShutting down bridge...")
         command_stream.close()
         client.stop()
+
