@@ -50,13 +50,7 @@ def get_sensor_data():
         if GPIO.input(PIR_PIN):
             pet_detected = True
         #get the load cell grams
-        current_grams = get_weight_in_grams()
-        percentage = (current_grams / MAX_BOWL_CAPACITY_GRAMS) * 100
-        #value should stay between 0 and 100 to make sense
-        food_percentage = max(0, min(100, round(percentage, 1)))
-        #the percentage food is converted dynamically into grams in the react frontend
-        #Math.round(live.food_percentage)
-
+        food_percentage = get_weight_in_grams()
     except Exception as e:
         print(f"Sensor error: {e}")
 
