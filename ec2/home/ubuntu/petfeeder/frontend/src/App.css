@@ -1,0 +1,69 @@
+:root { --bg: #f4f7f6; --text: #333; --card: #fff; --primary: #ff85a2; --warning: #ff9800; --danger: #f44336; }
+body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); }
+.dashboard-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.header h1 { display: flex; align-items: center; gap: 10px; color: var(--primary); margin: 0; }
+.status-badge { display: flex; align-items: center; gap: 5px; background: #e8f5e9; color: #2e7d32; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+.grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+@media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--card); padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.card h2 { display: flex; align-items: center; gap: 8px; margin-top: 0; font-size: 1.2rem; color: #555; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.big-stat { font-size: 4rem; font-weight: bold; color: var(--text); margin: 10px 0; }
+.big-stat span { font-size: 1.5rem; color: #888; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
+.btn:hover { opacity: 0.9; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-warning { background: var(--warning); color: white; }
+.btn-secondary { background: #e0e0e0; color: #333; width: auto; }
+.alert { padding: 15px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.alert.danger { background: #ffebee; color: var(--danger); border: 1px solid var(--danger); animation: pulse 2s infinite; }
+.alert.warning { flex-direction: column; background: #e3f2fd; border: 2px solid #90caf9; text-align: center; }
+.schedule-form { display: flex; gap: 10px; margin-bottom: 15px; }
+.schedule-form input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+.schedule-list { list-style: none; padding: 0; margin: 0; }
+.schedule-list li { background: #f9f9f9; padding: 10px; margin-bottom: 5px; border-radius: 6px; font-weight: bold; color: #555; }
+.loading { display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 1.5rem; color: #666; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(244,67,54,0.4); } 70% { box-shadow: 0 0 0 10px rgba(244,67,54,0); } 100% { box-shadow: 0 0 0 0 rgba(244,67,54,0); } }
+
+.btn-blue { background: #90caf9; color: white; }
+
+.alert-box {
+  background-color: #e3f2fd; /* Super cute soft blue */
+  color: #1976d2; /* Coordinated dark blue text */
+  border: 1px solid #90caf9; /* Soft blue border */
+  border-radius: 12px; /* Extra rounded for cuteness */
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Very soft shadow to make it pop */
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Spacing between the title and button */
+}
+
+/* Style for the title inside the box */
+.alert-box h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Spacing between the cat emoji and the text */
+  font-size: 1.3rem; /* A little larger title */
+}
+
+.alert-box .btn-primary {
+  width: auto; /* Don't stretch the button, looks cuter centered */
+  padding: 10px 25px;
+  background-color: var(--primary); /* Use your existing pink */
+  color: white;
+  border-radius: 20px; /* Fully rounded button for cuteness */
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s; /* Add a little bounce on hover */
+}
+
+.alert-box .btn-primary:hover {
+  transform: scale(1.05); /* Slight grow on hover */
+  opacity: 0.95;
+}
