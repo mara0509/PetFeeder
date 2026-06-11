@@ -2,18 +2,22 @@ import RPi.GPIO as GPIO
 import time
 from hx711 import HX711
 
+#GPIO 7
 PIR_PIN = 7  
+#GPIO 5
 HX711_DT = 5
+#GPIO 6
 HX711_SCK = 6
 
-
+#Calibration constant used to convert the raw HX711 reading into grams.
 CALIBRATION_FACTOR = 1228.859
+#how much the bowl weights-this should be what 0 is considered
 ZERO_POINT = 304695.0
 
-
+#aprox maxim capacity allowed on the bowl, taking also into consideration the bowl
 MAX_BOWL_CAPACITY_GRAMS = 500.0 
 
-
+#our GPIO numbering is by their name, not their physical placement 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIR_PIN, GPIO.IN)
 hx = HX711(HX711_DT, HX711_SCK)
